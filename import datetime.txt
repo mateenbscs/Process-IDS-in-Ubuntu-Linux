@@ -1,0 +1,31 @@
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#define BUFFER_SIZE 10
+typedef struct
+{
+int pc_buffer[BUFFER_SIZE];
+int in;
+int out;
+} my_buffer;
+int main()
+{
+/* the identifier for the shared memory segment */
+int segment_id;
+/* a pointer to the shared memory segment */
+my_buffer *shared_memory1, *shared_memory2;
+/* the size (in bytes) of the shared memory segment */
+int segment_size, i;
+pid_t pid;
+segment_size = sizeof(my_buffer);
+/** allocate a shared memory segment */
+segment_id = shmget(IPC_PRIVATE, segment_size, S_IRUSR |
+S_IWUSR);
+/* IPC_PRIVATE = create new IPC
+S_IRUSR, S_IWUSR = permission user readable, writeable
+*/
+/** attach the shared memory segment */
+shared_memory1 = (my_buffer *) shm…
+
